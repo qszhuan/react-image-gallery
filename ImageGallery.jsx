@@ -34,6 +34,31 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function(){
 		this.slideMonitor();
+		var self = this;
+		if(!!self.props.auto){
+			self.autoRun();
+		}
+	},
+	autoRun: function(){
+		var self = this;
+		var intervalId = setInterval(function(){
+				self.clickNext();
+			}, self.props.auto*1);
+			self.setState({intervalId: intervalId})
+	},
+	onMouseOver: function(){
+		var self = this;
+		if(!!self.props.auto && self.state.intervalId){
+			clearInterval(self.state.intervalId);
+			self.setState({intervalId: undefined});
+		}
+	},
+
+	onMouseLeave: function(){
+		var self = this;
+		if(!!self.props.auto && !self.state.intervalId){
+			self.autoRun();
+		}
 	},
 
 	getNext: function(index){
@@ -50,12 +75,7 @@ module.exports = React.createClass({
 
 	slideMonitor: function(){
 		var self = this;
-		if(!!self.props.auto){
-			setInterval(function(){
-				self.clickNext();
-			}, self.props.auto*1);
-		}
-		
+
 		var dom = this.getDOMNode();
 
 		var images = dom.getElementsByClassName('slide');
@@ -190,7 +210,9 @@ module.exports = React.createClass({
 		var self = this;
 
 		return (<div style={divStyle}>
-					<div style={slideContainerStyle}>
+					<div style={slideContainerStyle} 
+							onMouseOver={this.onMouseOver}
+							onMouseLeave={this.onMouseLeave}>
 						<div style={leftArrowStyle} 
 							onClick={this.clickPrev}></div>
 							{self.state.imageList}
