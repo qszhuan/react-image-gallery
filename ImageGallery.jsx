@@ -50,6 +50,12 @@ module.exports = React.createClass({
 
 	slideMonitor: function(){
 		var self = this;
+		if(!!self.props.auto){
+			setInterval(function(){
+				self.clickNext();
+			}, self.props.auto*1);
+		}
+		
 		var dom = this.getDOMNode();
 
 		var images = dom.getElementsByClassName('slide');
@@ -93,7 +99,7 @@ module.exports = React.createClass({
 						}, 1)
 					})(loopCount);
 				}
-			}, 1)
+			}, 100)
 		})();
 	},
 
