@@ -17,4 +17,5 @@ var images = [
 './images/IMG_9988.JPG',
 './images/IMG_9990.JPG',
 './images/IMG_9997.JPG'];
-React.render(<ImageGallery images={images} width='400px' height='300px' />, document.getElementById('content'));
+React.render(<ImageGallery images={images} width='80vw' height='60vw' />, 
+	document.getElementById('content'));

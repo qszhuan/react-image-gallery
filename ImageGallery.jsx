@@ -60,7 +60,11 @@ module.exports = React.createClass({
 				if(moving === false && self.state.slideQueue.length>0){
 					var seq = self.state.slideQueue.shift();
 					moving = true;
+					var queueSize = self.state.slideQueue.length;
+					var loopCount = queueSize >0 ? (100 - queueSize*15) : 100;
+					console.log(queueSize, loopCount);
 					(function loop(i){
+						var index = i;
 						if(seq.action === 'next'){
 							images[seq.nextIndex].style['left'] = '100%';
 						} else if(seq.action === 'prev'){
@@ -68,14 +72,14 @@ module.exports = React.createClass({
 						}
 						setTimeout(function(){
 							if(seq.action === 'next'){
-								var a = i;
-								var b = (i-100);
+								var a = index/loopCount*100;
+								var b = (index-loopCount)/loopCount*100;
 								images[seq.currentIndex].style['left'] = a + '%';
 								images[seq.previousIndex].style['left'] = b + '%';
 							}
 							else if(seq.action === 'prev'){
-								var a = -i;
-								var b = 100 -i;
+								var a = -index/loopCount*100;
+								var b = (loopCount -index)/loopCount*100;
 								images[seq.currentIndex].style['left'] = a + '%';
 								images[seq.nextIndex].style['left'] = b + '%';
 							}
@@ -86,9 +90,9 @@ module.exports = React.createClass({
 								moving = false;
 							}
 						}, 1)
-					})(100);
+					})(loopCount);
 				}
-			}, 10)
+			}, 1)
 		})();
 	},
 
@@ -134,24 +138,31 @@ module.exports = React.createClass({
 		var divStyle = {
 			width: width,
 			height: 'auto',
-			position:'absolute',
 			margin:'auto'
 		};
-		
+
 		var leftArrowStyle = {
 			position: 'absolute',
 			top: '50%',
 			transform: 'translateY(-50%)',
-			left: '0',
-			zIndex: 1
+			left: '5px',
+			zIndex: 1,
+			background: 'url(./media/arrow.png) no-repeat',
+			width: '55px',
+			height:'55px',
+			backgroundPosition: '-243px -33px'
 		};
 		
 		var rightArrowStyle = {
 			position: 'absolute',
 			top: '50%',
 			transform: 'translateY(-50%)',
-			right: '0',
-			zIndex:1
+			right: '5px',
+			zIndex:1,
+			background: 'url(./media/arrow.png) no-repeat',
+			width: '55px',
+			height:'55px',
+			backgroundPosition: '-303px -33px'
 		};
 		var slideContainerStyle = {
 			width: width,
@@ -164,11 +175,13 @@ module.exports = React.createClass({
 		var self = this;
 
 		return (<div style={divStyle}>
-					<div style={leftArrowStyle} onClick={this.clickPrev}><img src="./media/left-arrow.png"></img></div>
 					<div style={slideContainerStyle}>
-						{self.state.imageList}
+						<div style={leftArrowStyle} 
+							onClick={this.clickPrev}></div>
+							{self.state.imageList}
+						<div style={rightArrowStyle} 
+							onClick={this.clickNext}></div>
 					</div>
-					<div style={rightArrowStyle} onClick={this.clickNext}><img src="./media/right-arrow.png"></img></div>
 			</div>);
 	}
 });
