@@ -87,6 +87,7 @@ module.exports = React.createClass({
 							if(i>=0){
 								loop(i);
 							} else{
+								// self.setState(seq);
 								moving = false;
 							}
 						}, 1)
@@ -171,6 +172,14 @@ module.exports = React.createClass({
 			overflow: 'hidden',
 			position:'relative'
 		};
+		var pageNumberStyle = {
+			position: 'absolute',
+			bottom: '10px',
+			right: '10px',
+			backgroundColor: 'darkgrey',
+			borderRadius: '4px',
+			padding: '5px'
+		};
 
 		var self = this;
 
@@ -181,6 +190,7 @@ module.exports = React.createClass({
 							{self.state.imageList}
 						<div style={rightArrowStyle} 
 							onClick={this.clickNext}></div>
+						<div style={pageNumberStyle}>{this.state.currentIndex+1} of {this.props.images.length}</div>
 					</div>
 			</div>);
 	}
